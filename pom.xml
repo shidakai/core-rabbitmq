@@ -1,7 +1,4 @@
-<?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>jxudp-parent</artifactId>
@@ -20,7 +17,7 @@
 	</scm>
 	<properties>
 		<scmurl>scm:git:git@github.com:shidakai/rabbitmq.git</scmurl>
-		<revision>2.1.0</revision>
+		<revision>2.1.1</revision>
 	</properties>
 	<dependencies>
 
@@ -164,12 +161,11 @@
 								<configuration>
 									<target>
 										<replaceregexp byline="false">
-											<regexp
-												pattern="(&quot;version&quot;:[^&quot;]*&quot;)[^&quot;]*(&quot;)" />
-											<substitution expression="\1${revision}\2" />
+											<regexp pattern="(&quot;version&quot;:[^&quot;]*&quot;)[^&quot;]*(&quot;)"/>
+											<substitution expression="\1${revision}\2"/>
 											<fileset dir=".">
-												<include name="package.json" />
-												<include name="package-lock.json" />
+												<include name="package.json"/>
+												<include name="package-lock.json"/>
 											</fileset>
 										</replaceregexp>
 									</target>
