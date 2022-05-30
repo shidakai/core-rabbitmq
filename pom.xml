@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>jxudp-parent</artifactId>
+		<groupId>jxudp</groupId>
+		<version>2.1.0</version>
+	</parent>
+	<artifactId>jxudp-rabbitmq</artifactId>
+	<version>${revision}</version>
+	<name>jxudp-rabbitmq</name>
+	<description>rabbitmq</description>
+	<url>http://maven.apache.org</url>
+	<scm>
+		<connection>${scmurl}</connection>
+		<developerConnection>${scmurl}</developerConnection>
+		<url>scm:git:https://github.com/用户名</url>
+	</scm>
+	<properties>
+		<scmurl>scm:git:git@github.com:shidakai/rabbitmq.git</scmurl>
+		<revision>2.1.0</revision>
+	</properties>
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-core</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-net</artifactId>
+			<version>2.0.8.RELEASE</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor.ipc</groupId>
+			<artifactId>reactor-netty</artifactId>
+			<version>0.7.10.RELEASE</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>flattenself</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>flatten</goal>
+						</goals>
+						<configuration>
+							<updatePomFile>true</updatePomFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>deploy</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>jxudp-plugin</groupId>
+						<artifactId>jxudp-build-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>beforeDeploy</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>beforeDeploy</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>afterDeploy</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>afterDeploy</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>install-node-and-npm</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+								<inherited>false</inherited>
+							</execution>
+							<execution>
+								<id>npm-install</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<inherited>false</inherited>
+								<configuration>
+									<arguments>ci</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm-build</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<inherited>false</inherited>
+								<configuration>
+									<arguments>run log</arguments>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<nodeVersion>${nodeVersion}</nodeVersion>
+							<npmVersion>${npmVersion}</npmVersion>
+							<npmDownloadRoot>${npmDownloadRoot}</npmDownloadRoot>
+							<npmRegistryURL>${npmRegistryURL}</npmRegistryURL>
+							<nodeDownloadRoot>${nodeDownloadRoot}</nodeDownloadRoot>
+							<installDirectory>${project.build.directory}</installDirectory>
+						</configuration>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>afterdeploy</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>changefrontfromrevision</id>
+								<phase>package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<inherited>false</inherited>
+								<configuration>
+									<target>
+										<replaceregexp byline="false">
+											<regexp
+												pattern="(&quot;version&quot;:[^&quot;]*&quot;)[^&quot;]*(&quot;)" />
+											<substitution expression="\1${revision}\2" />
+											<fileset dir=".">
+												<include name="package.json" />
+												<include name="package-lock.json" />
+											</fileset>
+										</replaceregexp>
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
