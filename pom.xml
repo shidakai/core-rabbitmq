@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>jxudp-parent</artifactId>
-		<groupId>jxudp</groupId>
-		<version>2.1.0</version>
+		<groupId>jxudp-bom</groupId>
+		<artifactId>platform-parent</artifactId>
+		<version>5.1.0</version>
 	</parent>
+	<groupId>jxudp</groupId>
 	<artifactId>jxudp-rabbitmq</artifactId>
 	<version>${revision}</version>
 	<name>jxudp-rabbitmq</name>
@@ -16,7 +17,7 @@
 		<url>scm:git:https://github.com/用户名</url>
 	</scm>
 	<properties>
-		<scmurl>scm:git:git@github.com:shidakai/rabbitmq.git</scmurl>
+		<scmurl>scm:git:git@github.com:shidakai/core-rabbitmq.git</scmurl>
 		<revision>2.1.1</revision>
 	</properties>
 	<dependencies>
